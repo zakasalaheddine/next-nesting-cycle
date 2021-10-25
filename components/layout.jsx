@@ -7,7 +7,5 @@ export default function Layout({ children }) {
 
 const LayoutContainer = styled(Box)`
   display: flex;
-  align-items: center;
-  height: 100vh;
   width: 100vw;
 `
