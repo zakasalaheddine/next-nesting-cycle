@@ -1,4 +1,4 @@
-import { IconButton } from '@chakra-ui/button'
+import { Button, IconButton } from '@chakra-ui/button'
 import { Box, Text } from '@chakra-ui/layout'
 import styled from '@emotion/styled'
 import { CrackedEgg } from 'utils/icons/cracked-icon'
@@ -47,6 +47,8 @@ export default function NestDetails() {
           />
         </Box>
       </EggsContainer>
+
+      <Button colorScheme="teal" mt="10" w="full">Add New Egg</Button>
     </DetailsContainer>
   )
 }
