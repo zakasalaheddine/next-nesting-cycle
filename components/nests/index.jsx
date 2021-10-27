@@ -1,5 +1,7 @@
+import { useDisclosure } from '@chakra-ui/hooks'
 import { Grid } from '@chakra-ui/layout'
 import AddNestFloatingButton from './add-nest-button'
+import AddNestModal from './add-nest-modal'
 import Nest from './nest'
 
 const NestsData = [
@@ -11,6 +13,7 @@ const NestsData = [
 ]
 
 export default function Nests() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
       <Grid
@@ -18,7 +21,7 @@ export default function Nests() {
         gap={10}
         mx="auto"
       >
-        <AddNestFloatingButton />
+        <AddNestFloatingButton onClick={onOpen} />
         {NestsData.map((nest) => (
           <Nest
             name={nest.name}
@@ -28,6 +31,7 @@ export default function Nests() {
           />
         ))}
       </Grid>
+      <AddNestModal isOpen={isOpen} onClose={onClose} />
     </>
   )
 }
