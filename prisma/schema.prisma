@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model BirdsType {
+  id    String @id @default(cuid())
+  name  String
+  birds Bird[]
+}
+
+model Bird {
+  id          String     @id @default(cuid())
+  name        String
+  ringNumber  String
+  sexe        String
+  BirdsType   BirdsType? @relation(fields: [birdsTypeId], references: [id])
+  birdsTypeId String?
+  NestMale    Nest[]     @relation("male")
+  NestFemale  Nest[]     @relation("female")
+}
+
+model Nest {
+  id        String      @id @default(cuid())
+  name      String
+  male      Bird        @relation("male", fields: [maleId], references: [id])
+  maleId    String
+  female    Bird        @relation("female", fields: [femaleId], references: [id])
+  femaleId  String
+  NestEgges NestEgges[]
+}
+
+model NestEgges {
+  id        String   @id @default(cuid())
+  dateBirth DateTime @default(now())
+  dateHash  DateTime
+  Nest      Nest     @relation(fields: [nestId], references: [id])
+  nestId    String
+}

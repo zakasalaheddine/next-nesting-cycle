@@ -12,7 +12,7 @@ const NestsData = [
   { id: 5, name: 'Nest 5', male: 'Canary 9099', female: 'Canary 0900' }
 ]
 
-export default function Nests() {
+export default function Nests({data}) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
@@ -22,7 +22,7 @@ export default function Nests() {
         mx="auto"
       >
         <AddNestFloatingButton onClick={onOpen} />
-        {NestsData.map((nest) => (
+        {data.map((nest) => (
           <Nest
             name={nest.name}
             male={nest.male}
