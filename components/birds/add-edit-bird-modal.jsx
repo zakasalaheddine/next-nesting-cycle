@@ -12,33 +12,50 @@ import {
 } from '@chakra-ui/modal'
 import { Select } from '@chakra-ui/select'
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
-import { addNewBird } from 'utils/requests/birds'
+import { addNewBird, editBird } from 'utils/requests/birds'
 
-export default function AddEditBirdModal({ isOpen, onClose, types }) {
+export default function AddEditBirdModal({
+  isOpen,
+  onClose,
+  types,
+  birdToEdit
+}) {
   const queryClient = useQueryClient()
-  const mutation = useMutation(addNewBird, {
+  const addBirdMutation = useMutation(addNewBird, {
     onSuccess: () => {
-      // Invalidate and refetch
       queryClient.invalidateQueries('birds')
     }
   })
+  const editBirdMutation = useMutation(editBird, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('birds')
+    }
+  })
+
+  const [bird, setBird] = useState({
+    ringNumber: '',
+    type: types[0] ? types[0].id : '',
+    sexe: 'female'
+  })
+
   const handleAddNestSubmit = async () => {
-    setLoading(true)
-    mutation.mutate({
-      ringNumber: bird.ringNumber,
-      sexe: bird.sexe,
-      type: bird.type
-    })
-    // const response = await axios.post('/api/add-bird', {
-    //   name: '',
-    //   ringNumber: bird.ringNumber,
-    //   sexe: bird.sexe,
-    //   type: bird.type
-    // })
-    // console.log(response)
-    setLoading(false)
+    if (birdToEdit) {
+      editBirdMutation.mutate({
+        id: bird.id,
+        ringNumber: bird.ringNumber,
+        sexe: bird.sexe,
+        type: bird.type
+      })
+    } else {
+      addBirdMutation.mutate({
+        ringNumber: bird.ringNumber,
+        sexe: bird.sexe,
+        type: bird.type
+      })
+    }
+
     setBird({
       ringNumber: '',
       type: types[0] ? types[0].id : '',
@@ -46,15 +63,19 @@ export default function AddEditBirdModal({ isOpen, onClose, types }) {
     })
     onClose()
   }
-  const [bird, setBird] = useState({
-    ringNumber: '',
-    type: types[0] ? types[0].id : '',
-    sexe: 'female'
-  })
-  const [loading, setLoading] = useState(false)
   const handleChange = (key, value) => {
     setBird({ ...bird, [key]: value })
   }
+
+  useEffect(() => {
+    if (birdToEdit) setBird({ ...birdToEdit, type: birdToEdit.birdsTypeId })
+    else
+      setBird({
+        ringNumber: '',
+        type: types[0] ? types[0].id : '',
+        sexe: 'female'
+      })
+  }, [birdToEdit])
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -100,7 +121,7 @@ export default function AddEditBirdModal({ isOpen, onClose, types }) {
             colorScheme="blue"
             mr={3}
             onClick={handleAddNestSubmit}
-            isLoading={loading}
+            isLoading={addBirdMutation.isLoading || editBirdMutation.isLoading}
           >
             Save
           </Button>

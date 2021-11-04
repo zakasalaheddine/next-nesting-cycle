@@ -3,17 +3,29 @@ import { Input, Select } from '@chakra-ui/react'
 import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table'
 import AddEditBirdModal from './add-edit-bird-modal'
 import { useDisclosure } from '@chakra-ui/hooks'
+import { useState } from 'react'
 
 export default function BirdsList({ birdsTypes, birds }) {
-  console.log(birds)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [birdToEdit, setBirdToEdit] = useState()
   return (
     <>
-      <AddEditBirdModal isOpen={isOpen} onClose={onClose} types={birdsTypes} />
+      <AddEditBirdModal
+        isOpen={isOpen}
+        onClose={onClose}
+        types={birdsTypes}
+        birdToEdit={birdToEdit}
+      />
       <Table variant="simple" size="sm">
         <TableCaption placement="bottom">
           <div>Manage My Birds</div>
-          <Button colorScheme="orange" onClick={onOpen}>
+          <Button
+            colorScheme="orange"
+            onClick={() => {
+              setBirdToEdit(undefined)
+              onOpen()
+            }}
+          >
             Add New Bird
           </Button>
         </TableCaption>
@@ -27,7 +39,7 @@ export default function BirdsList({ birdsTypes, birds }) {
         </Thead>
         <Tbody>
           {birds.map((bird) => (
-            <Tr>
+            <Tr key={bird.id}>
               <Td>{bird.ringNumber}</Td>
               <Td>{bird.BirdsType.name}</Td>
               <Td>{bird.sexe}</Td>
@@ -36,7 +48,14 @@ export default function BirdsList({ birdsTypes, birds }) {
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Button colorScheme="teal" size="sm">
+                <Button
+                  colorScheme="teal"
+                  size="sm"
+                  onClick={() => {
+                    setBirdToEdit(bird)
+                    onOpen()
+                  }}
+                >
                   Edit
                 </Button>
                 <Button colorScheme="red" size="sm">

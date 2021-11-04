@@ -14,3 +14,13 @@ export const addNewBird = async (body) => {
   })
   return data
 }
+export const editBird = async (body) => {
+  const { data } = await axios.put('/api/add-bird', {
+    id: body.id,
+    name: '',
+    ringNumber: body.ringNumber,
+    sexe: body.sexe,
+    type: body.type
+  })
+  return data
+}
