@@ -1,10 +1,10 @@
 import Head from 'next/head'
 import Layout from '../components/layout'
 import Nests from '../components/nests'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from 'utils/db/prisma'
 
-export default function Home({ nests }) {
-  console.log(nests)
+export default function Home({ nests, birds }) {
+  console.log(birds)
   return (
     <div>
       <Head>
@@ -13,14 +13,14 @@ export default function Home({ nests }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <Nests data={nests} />
+        <Nests nests={nests} birds={birds}/>
       </Layout>
     </div>
   )
 }
 
 export async function getStaticProps(_) {
-  const prisma = new PrismaClient()
   const nests = await prisma.nest.findMany()
-  return { props: { nests } }
+  const birds = await prisma.bird.findMany()
+  return { props: { nests, birds } }
 }

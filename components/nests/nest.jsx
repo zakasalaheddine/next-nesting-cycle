@@ -7,8 +7,8 @@ export default function Nest({ name, male, female }) {
     <NestButton>
       <NestName fontSize="3xl">{name}</NestName>
       <Box fontSize="sm">
-        <BirdName>{male}</BirdName>
-        <BirdName>{female}</BirdName>
+        <BirdName>{male.ringNumber}</BirdName>
+        <BirdName>{female.ringNumber}</BirdName>
       </Box>
     </NestButton>
   )

@@ -10,9 +10,26 @@ import {
   ModalOverlay
 } from '@chakra-ui/modal'
 import { Select } from '@chakra-ui/select'
+import { useState } from 'react'
+import {  useMutation, useQueryClient } from 'react-query'
+import { addNewNest } from 'utils/requests/nests'
 
-export default function AddNestModal({ isOpen, onClose }) {
-  const handleAddNestSubmit = () => {
+export default function AddNestModal({ isOpen, onClose, males, females }) {
+  const [male, setMale] = useState('')
+  const [female, setFemale] = useState('')
+
+  const queryClient = useQueryClient()
+  const addNestMutation = useMutation(addNewNest, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('nests')
+    }
+  })
+
+  const handleAddNestSubmit = async () => {
+    addNestMutation.mutate({
+      male,
+      female
+    })
     onClose()
   }
   return (
@@ -24,20 +41,34 @@ export default function AddNestModal({ isOpen, onClose }) {
         <ModalBody>
           <FormControl>
             <FormLabel>Male</FormLabel>
-            <Select>
-              <option value="1203">Canary 1203</option>
-              <option value="1204">Canary 1204</option>
-              <option value="1205">Canary 1205</option>
-              <option value="1206">Canary 1206</option>
+            <Select
+              value={male}
+              onChange={(e) => {
+                setMale(e.target.value)
+              }}
+            >
+              <option value="">Select a male</option>
+              {males.map((male) => (
+                <option key={male.id} value={male.id}>
+                  {male.ringNumber}
+                </option>
+              ))}
             </Select>
           </FormControl>
           <FormControl>
             <FormLabel>Female</FormLabel>
-            <Select>
-              <option value="1203">Canary 1203</option>
-              <option value="1204">Canary 1204</option>
-              <option value="1205">Canary 1205</option>
-              <option value="1206">Canary 1206</option>
+            <Select
+              value={female}
+              onChange={(e) => {
+                setFemale(e.target.value)
+              }}
+            >
+              <option value="">Select a female</option>
+              {females.map((female) => (
+                <option key={female.id} value={female.id}>
+                  {female.ringNumber}
+                </option>
+              ))}
             </Select>
           </FormControl>
         </ModalBody>
