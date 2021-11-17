@@ -9,7 +9,6 @@ import Nest from './nest'
 export default function Nests({ nests, birds }) {
   const males = birds.filter((bird) => bird.sexe === 'male')
   const females = birds.filter((bird) => bird.sexe === 'female')
-  console.log({ males, females })
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { data } = useQuery('nests', getAllNests, { initialData: nests })
   console.log(data.nests)
@@ -24,6 +23,7 @@ export default function Nests({ nests, birds }) {
         {data.nests &&
           data.nests.map((nest) => (
             <Nest
+              id={nest.id}
               name={nest.name}
               male={nest.male}
               female={nest.female}

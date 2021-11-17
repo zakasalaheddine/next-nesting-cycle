@@ -3,52 +3,30 @@ import { Box, Text } from '@chakra-ui/layout'
 import styled from '@emotion/styled'
 import { CrackedEgg } from 'utils/icons/cracked-icon'
 
-export default function NestDetails() {
+export default function NestDetails({ nest }) {
+  console.log({ nest })
+  const { male, female , NestEgges} = nest
   return (
     <DetailsContainer>
       <ParentsContainer>
-        <Box>Male Canary 1234</Box>
-        <Box>Female Canary 3456</Box>
+        <Box>Male {`${male.BirdsType.name} ${male.ringNumber}`}</Box>
+        <Box>Female {`${female.BirdsType.name} ${female.ringNumber}`}</Box>
       </ParentsContainer>
       <EggsContainer>
-        <Box>
-          <Text>Egg 1 | 25/10/2021</Text>
-          <IconButton
-            aria-label="Cracked Egg"
-            icon={<CrackedEgg fill="none" />}
-          />
-        </Box>
-        <Box>
-          <Text>Egg 2 | 25/10/2021</Text>
-          <IconButton
-            aria-label="Cracked Egg"
-            icon={<CrackedEgg fill="none" />}
-          />
-        </Box>
-        <Box>
-          <Text>Egg 3 | 28/10/2021</Text>
-          <IconButton
-            aria-label="Cracked Egg"
-            icon={<CrackedEgg fill="none" />}
-          />
-        </Box>
-        <Box>
-          <Text>Egg 4 | 28/10/2021</Text>
-          <IconButton
-            aria-label="Cracked Egg"
-            icon={<CrackedEgg fill="none" />}
-          />
-        </Box>
-        <Box>
-          <Text>Egg 5 | 30/10/2021</Text>
-          <IconButton
-            aria-label="Cracked Egg"
-            icon={<CrackedEgg fill="none" />}
-          />
-        </Box>
+        {NestEgges.map((egg, idx) => (
+          <Box>
+            <Text>Egg ${idx + 1} | 25/10/2021</Text>
+            <IconButton
+              aria-label="Cracked Egg"
+              icon={<CrackedEgg fill="none" />}
+            />
+          </Box>
+        ))}
       </EggsContainer>
 
-      <Button colorScheme="teal" mt="10" w="full">Add New Egg</Button>
+      <Button colorScheme="teal" mt="10" w="full">
+        Add New Egg
+      </Button>
     </DetailsContainer>
   )
 }

@@ -1,16 +1,19 @@
 import { Button } from '@chakra-ui/button'
 import { Box, Text } from '@chakra-ui/layout'
 import styled from '@emotion/styled'
+import Link from 'next/link'
 
-export default function Nest({ name, male, female }) {
+export default function Nest({ id, name, male, female }) {
   return (
-    <NestButton>
-      <NestName fontSize="3xl">{name}</NestName>
-      <Box fontSize="sm">
-        <BirdName>{male.ringNumber}</BirdName>
-        <BirdName>{female.ringNumber}</BirdName>
-      </Box>
-    </NestButton>
+    <Link href={`/${id}`}>
+      <NestButton as="a">
+        <NestName fontSize="3xl">{name}</NestName>
+        <Box fontSize="sm">
+          <BirdName>{male.ringNumber}</BirdName>
+          <BirdName>{female.ringNumber}</BirdName>
+        </Box>
+      </NestButton>
+    </Link>
   )
 }
 
