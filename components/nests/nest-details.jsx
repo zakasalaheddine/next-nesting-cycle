@@ -1,11 +1,24 @@
 import { Button, IconButton } from '@chakra-ui/button'
 import { Box, Text } from '@chakra-ui/layout'
 import styled from '@emotion/styled'
+import { useMutation, useQueryClient } from 'react-query'
 import { CrackedEgg } from 'utils/icons/cracked-icon'
+import { postNewEgg } from 'utils/requests/nests'
 
 export default function NestDetails({ nest }) {
-  console.log({ nest })
-  const { male, female , NestEgges} = nest
+  const { male, female, NestEgges, id } = nest
+  const queryClient = useQueryClient()
+
+  const addEggMutation = useMutation(postNewEgg, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(`nest`)
+    }
+  })
+
+  const addNewEgg = () => {
+    addEggMutation.mutate({ nestId: id })
+  }
+
   return (
     <DetailsContainer>
       <ParentsContainer>
@@ -14,8 +27,8 @@ export default function NestDetails({ nest }) {
       </ParentsContainer>
       <EggsContainer>
         {NestEgges.map((egg, idx) => (
-          <Box>
-            <Text>Egg ${idx + 1} | 25/10/2021</Text>
+          <Box key={egg.id}>
+            <Text>Egg {idx + 1} | 25/10/2021</Text>
             <IconButton
               aria-label="Cracked Egg"
               icon={<CrackedEgg fill="none" />}
@@ -24,7 +37,13 @@ export default function NestDetails({ nest }) {
         ))}
       </EggsContainer>
 
-      <Button colorScheme="teal" mt="10" w="full">
+      <Button
+        colorScheme="teal"
+        mt="10"
+        w="full"
+        onClick={addNewEgg}
+        isLoading={addEggMutation.isLoading}
+      >
         Add New Egg
       </Button>
     </DetailsContainer>

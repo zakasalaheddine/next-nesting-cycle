@@ -12,3 +12,15 @@ export const addNewNest = async (body) => {
   })
   return data
 }
+
+export const getNestById = async (nestId) => {
+  const { data } = await axios.get(`/api/nests/${nestId}`, {
+    params: { nest: nestId }
+  })
+  console.log({ data })
+  return data
+}
+
+export const postNewEgg = async (nestId) => {
+  await axios.post('/api/eggs', { nest: nestId })
+}

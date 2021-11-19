@@ -4,7 +4,6 @@ import Nests from '../components/nests'
 import { prisma } from 'utils/db/prisma'
 
 export default function Home({ nests, birds }) {
-  console.log(birds)
   return (
     <div>
       <Head>

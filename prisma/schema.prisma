@@ -42,7 +42,7 @@ model Nest {
 model NestEgges {
   id        String   @id @default(cuid())
   dateBirth DateTime @default(now())
-  dateHash  DateTime
+  dateHash  DateTime?
   Nest      Nest     @relation(fields: [nestId], references: [id])
   nestId    String
 }

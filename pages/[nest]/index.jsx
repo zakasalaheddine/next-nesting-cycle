@@ -1,8 +1,23 @@
+import { Stack } from '@chakra-ui/layout'
+import { Skeleton } from '@chakra-ui/skeleton'
 import NestDetails from 'components/nests/nest-details'
+import { useRouter } from 'next/dist/client/router'
+import { useQuery } from 'react-query'
 import { prisma } from 'utils/db/prisma'
+import { getNestById } from 'utils/requests/nests'
 
 export default function Nest({ nest }) {
-  return <NestDetails nest={nest} />
+  const { query } = useRouter()
+  const { data } = useQuery(`nest`, () => getNestById(query.nest))
+  return data && data.nest ? (
+    <NestDetails nest={data.nest} />
+  ) : (
+    <Stack>
+      <Skeleton height="20px" />
+      <Skeleton height="20px" />
+      <Skeleton height="20px" />
+    </Stack>
+  )
 }
 
 export async function getStaticPaths() {
@@ -24,7 +39,7 @@ export async function getStaticProps({ params }) {
     }
   })
   return {
-    props: { nest },
+    props: { nest: JSON.stringify(nest) },
     revalidate: 1
   }
 }
