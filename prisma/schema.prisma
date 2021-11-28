@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
@@ -19,14 +19,28 @@ model BirdsType {
 }
 
 model Bird {
-  id          String     @id @default(cuid())
-  name        String
-  ringNumber  String
-  sexe        String
-  BirdsType   BirdsType? @relation(fields: [birdsTypeId], references: [id])
-  birdsTypeId String?
-  NestMale    Nest[]     @relation("male")
-  NestFemale  Nest[]     @relation("female")
+  id              String            @id @default(cuid())
+  name            String
+  ringNumber      String
+  sexe            String
+  BirdsType       BirdsType?        @relation(fields: [birdsTypeId], references: [id])
+  birdsTypeId     String?
+  NestMale        Nest[]            @relation("male")
+  NestFemale      Nest[]            @relation("female")
+  nestId          String?
+  SiblingsDetails SiblingsDetails[]
+}
+
+model Siblings {
+  id     Int     @id @default(autoincrement())
+  nestId String?
+  Nest   Nest?   @relation(fields: [nestId], references: [id])
+}
+
+model SiblingsDetails {
+  id     Int    @id @default(autoincrement())
+  birdId String
+  Bird   Bird   @relation(fields: [birdId], references: [id])
 }
 
 model Nest {
@@ -37,12 +51,13 @@ model Nest {
   female    Bird        @relation("female", fields: [femaleId], references: [id])
   femaleId  String
   NestEgges NestEgges[]
+  Siblings  Siblings[]
 }
 
 model NestEgges {
-  id        String   @id @default(cuid())
-  dateBirth DateTime @default(now())
+  id        String    @id @default(cuid())
+  dateBirth DateTime  @default(now())
   dateHash  DateTime?
-  Nest      Nest     @relation(fields: [nestId], references: [id])
+  Nest      Nest      @relation(fields: [nestId], references: [id])
   nestId    String
 }

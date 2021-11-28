@@ -24,3 +24,7 @@ export const getNestById = async (nestId) => {
 export const postNewEgg = async (nestId) => {
   await axios.post('/api/eggs', { nest: nestId })
 }
+
+export const hashAnEgg = async (eggId, nestId) => {
+  
+}
