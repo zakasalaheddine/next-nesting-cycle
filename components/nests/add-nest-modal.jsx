@@ -10,26 +10,19 @@ import {
   ModalOverlay
 } from '@chakra-ui/modal'
 import { Select } from '@chakra-ui/select'
+import { useCreateNewNest } from 'graphql/mutations/createNest'
 import { useState } from 'react'
-import {  useMutation, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import { addNewNest } from 'utils/requests/nests'
 
 export default function AddNestModal({ isOpen, onClose, males, females }) {
   const [male, setMale] = useState('')
   const [female, setFemale] = useState('')
 
-  const queryClient = useQueryClient()
-  const addNestMutation = useMutation(addNewNest, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('nests')
-    }
-  })
+  const { mutate } = useCreateNewNest()
 
   const handleAddNestSubmit = async () => {
-    addNestMutation.mutate({
-      male,
-      female
-    })
+    await mutate({ male, female })
     onClose()
   }
   return (

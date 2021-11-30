@@ -2,8 +2,12 @@ import Head from 'next/head'
 import Layout from '../components/layout'
 import Nests from '../components/nests'
 import { prisma } from 'utils/db/prisma'
+import { useNests } from 'graphql/queries/useNests'
+import { useBirds } from 'graphql/queries/useBirds'
 
 export default function Home({ nests, birds }) {
+  const { data: graphQlNests } = useNests(nests)
+  const { data: graphQlBirds } = useBirds(birds)
   return (
     <div>
       <Head>
@@ -12,7 +16,7 @@ export default function Home({ nests, birds }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <Nests nests={nests} birds={birds}/>
+        <Nests nests={graphQlNests} birds={graphQlBirds} />
       </Layout>
     </div>
   )

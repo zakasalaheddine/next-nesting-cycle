@@ -10,8 +10,6 @@ export default function Nests({ nests, birds }) {
   const males = birds.filter((bird) => bird.sexe === 'male')
   const females = birds.filter((bird) => bird.sexe === 'female')
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { data } = useQuery('nests', getAllNests, { initialData: nests })
-  console.log(data.nests)
   return (
     <>
       <Grid
@@ -20,8 +18,8 @@ export default function Nests({ nests, birds }) {
         mx="auto"
       >
         <AddNestFloatingButton onClick={onOpen} />
-        {data.nests &&
-          data.nests.map((nest) => (
+        {nests &&
+          nests.map((nest) => (
             <Nest
               id={nest.id}
               name={nest.name}

@@ -5,15 +5,13 @@ import Link from 'next/link'
 
 export default function Nest({ id, name, male, female }) {
   return (
-    <Link href={`/${id}`}>
       <NestButton as="a">
         <NestName fontSize="3xl">{name}</NestName>
         <Box fontSize="sm">
-          <BirdName>{male.ringNumber}</BirdName>
-          <BirdName>{female.ringNumber}</BirdName>
+          <BirdName>{male?.ringNumber}</BirdName>
+          <BirdName>{female?.ringNumber}</BirdName>
         </Box>
       </NestButton>
-    </Link>
   )
 }
 
