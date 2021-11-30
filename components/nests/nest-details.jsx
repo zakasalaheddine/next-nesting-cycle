@@ -2,16 +2,22 @@ import { Button, IconButton } from '@chakra-ui/button'
 import { Box, Text } from '@chakra-ui/layout'
 import styled from '@emotion/styled'
 import { useCreateNewEgg } from 'graphql/mutations/createEgg'
-import { useMutation, useQueryClient } from 'react-query'
+import { useHashEgg } from 'graphql/mutations/hashEgg'
+import { BirdIcon } from 'utils/icons/bird-icon'
 import { CrackedEgg } from 'utils/icons/cracked-icon'
-import { postNewEgg } from 'utils/requests/nests'
 
 export default function NestDetails({ nest }) {
   const { male, female, eggs, id } = nest
   const { mutate, isLoading } = useCreateNewEgg(id)
+  const { mutate: hashEggMutation, isLoading: isEggHashLoading } =
+    useHashEgg(id)
 
   const addNewEgg = () => {
     mutate({ nestId: id })
+  }
+
+  const hashEgg = (eggId) => {
+    hashEggMutation({ id: eggId })
   }
 
   return (
@@ -28,7 +34,15 @@ export default function NestDetails({ nest }) {
             </Text>
             <IconButton
               aria-label="Cracked Egg"
-              icon={<CrackedEgg fill="none" />}
+              icon={
+                egg.dateHash ? (
+                  <BirdIcon fill="none" />
+                ) : (
+                  <CrackedEgg fill="none" />
+                )
+              }
+              onClick={() => hashEgg(egg.id)}
+              isLoading={isEggHashLoading}
             />
           </Box>
         ))}
