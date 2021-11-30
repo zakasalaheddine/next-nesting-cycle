@@ -11,10 +11,9 @@ import {
   ModalOverlay
 } from '@chakra-ui/modal'
 import { Select } from '@chakra-ui/select'
-import axios from 'axios'
+import { useCreateNewBird } from 'graphql/mutations/createBird'
+import { useUpdateBird } from 'graphql/mutations/updateBird'
 import { useEffect, useState } from 'react'
-import { useMutation, useQueryClient } from 'react-query'
-import { addNewBird, editBird } from 'utils/requests/birds'
 
 export default function AddEditBirdModal({
   isOpen,
@@ -22,17 +21,10 @@ export default function AddEditBirdModal({
   types,
   birdToEdit
 }) {
-  const queryClient = useQueryClient()
-  const addBirdMutation = useMutation(addNewBird, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('birds')
-    }
-  })
-  const editBirdMutation = useMutation(editBird, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('birds')
-    }
-  })
+  const { mutate: createMutation, isLoading: isCreateLoading } =
+    useCreateNewBird()
+  const { mutate: updateBirdMutation, isLoading: isUpdateLoading } =
+    useUpdateBird()
 
   const [bird, setBird] = useState({
     ringNumber: '',
@@ -42,14 +34,14 @@ export default function AddEditBirdModal({
 
   const handleAddNestSubmit = async () => {
     if (birdToEdit) {
-      editBirdMutation.mutate({
+      updateBirdMutation({
         id: bird.id,
         ringNumber: bird.ringNumber,
         sexe: bird.sexe,
         type: bird.type
       })
     } else {
-      addBirdMutation.mutate({
+      createMutation({
         ringNumber: bird.ringNumber,
         sexe: bird.sexe,
         type: bird.type
@@ -97,9 +89,9 @@ export default function AddEditBirdModal({
               value={bird.type}
               onChange={(e) => handleChange('type', e.target.value)}
             >
-              {types.map(({ id, name }) => (
+              {types.map(({ id, type }) => (
                 <option value={id} key={id}>
-                  {name}
+                  {type}
                 </option>
               ))}
             </Select>
@@ -121,7 +113,7 @@ export default function AddEditBirdModal({
             colorScheme="blue"
             mr={3}
             onClick={handleAddNestSubmit}
-            isLoading={addBirdMutation.isLoading || editBirdMutation.isLoading}
+            isLoading={isCreateLoading || isUpdateLoading}
           >
             Save
           </Button>

@@ -2,12 +2,13 @@ import { Box, Stack } from '@chakra-ui/layout'
 import BirdsList from 'components/birds/birds-list'
 import Layout from 'components/layout'
 import { useQuery } from 'react-query'
-import { prisma } from 'utils/db/prisma'
 import { getAllBirds } from 'utils/requests/birds'
 import { Skeleton } from '@chakra-ui/react'
+import { queryBirdTypes } from 'graphql/queries/useBirdTypes'
+import { useBirds } from 'graphql/queries/useBirds'
 
 export default function ListsOfBirds({ types }) {
-  const { isLoading, data } = useQuery('birds', getAllBirds)
+  const { isLoading, data } = useBirds()
   return (
     <Layout>
       <Box w={['full', 'md', 'lg']} mx="auto">
@@ -18,7 +19,7 @@ export default function ListsOfBirds({ types }) {
             <Skeleton height="20px" />
           </Stack>
         ) : (
-          <BirdsList birdsTypes={types} birds={data.birds} />
+          <BirdsList birdsTypes={types} birds={data} />
         )}
       </Box>
     </Layout>
@@ -26,6 +27,6 @@ export default function ListsOfBirds({ types }) {
 }
 
 export const getStaticProps = async (_) => {
-  const birdsTypes = await prisma.birdsType.findMany()
+  const birdsTypes = await queryBirdTypes()
   return { props: { types: birdsTypes } }
 }

@@ -1,5 +1,4 @@
 import { Button } from '@chakra-ui/button'
-import { Input, Select } from '@chakra-ui/react'
 import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table'
 import AddEditBirdModal from './add-edit-bird-modal'
 import { useDisclosure } from '@chakra-ui/hooks'
@@ -41,7 +40,7 @@ export default function BirdsList({ birdsTypes, birds }) {
           {birds.map((bird) => (
             <Tr key={bird.id}>
               <Td>{bird.ringNumber}</Td>
-              <Td>{bird.BirdsType.name}</Td>
+              <Td>{bird.bird_type.type}</Td>
               <Td>{bird.sexe}</Td>
               <Td
                 display="flex"
