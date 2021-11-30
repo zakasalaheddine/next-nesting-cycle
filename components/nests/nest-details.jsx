@@ -1,34 +1,31 @@
 import { Button, IconButton } from '@chakra-ui/button'
 import { Box, Text } from '@chakra-ui/layout'
 import styled from '@emotion/styled'
+import { useCreateNewEgg } from 'graphql/mutations/createEgg'
 import { useMutation, useQueryClient } from 'react-query'
 import { CrackedEgg } from 'utils/icons/cracked-icon'
 import { postNewEgg } from 'utils/requests/nests'
 
 export default function NestDetails({ nest }) {
-  const { male, female, NestEgges, id } = nest
-  const queryClient = useQueryClient()
-
-  const addEggMutation = useMutation(postNewEgg, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(`nest`)
-    }
-  })
+  const { male, female, eggs, id } = nest
+  const { mutate, isLoading } = useCreateNewEgg(id)
 
   const addNewEgg = () => {
-    addEggMutation.mutate({ nestId: id })
+    mutate({ nestId: id })
   }
 
   return (
     <DetailsContainer>
       <ParentsContainer>
-        <Box>Male {`${male.BirdsType.name} ${male.ringNumber}`}</Box>
-        <Box>Female {`${female.BirdsType.name} ${female.ringNumber}`}</Box>
+        <Box>Male {`${male.bird_type.type} ${male.ringNumber}`}</Box>
+        <Box>Female {`${female.bird_type.type} ${female.ringNumber}`}</Box>
       </ParentsContainer>
       <EggsContainer>
-        {NestEgges.map((egg, idx) => (
+        {eggs.map((egg, idx) => (
           <Box key={egg.id}>
-            <Text>Egg {idx + 1} | 25/10/2021</Text>
+            <Text>
+              Egg {idx + 1} | {egg.dateBirth}
+            </Text>
             <IconButton
               aria-label="Cracked Egg"
               icon={<CrackedEgg fill="none" />}
@@ -42,7 +39,7 @@ export default function NestDetails({ nest }) {
         mt="10"
         w="full"
         onClick={addNewEgg}
-        isLoading={addEggMutation.isLoading}
+        isLoading={isLoading}
       >
         Add New Egg
       </Button>
