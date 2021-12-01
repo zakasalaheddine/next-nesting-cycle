@@ -1,31 +1,32 @@
 import { gql, request } from 'graphql-request'
-import moment from 'moment'
 import { useMutation, useQueryClient } from 'react-query'
 import { GRAPHQL_URL } from 'utils/constants'
 
-export const createNewEgg = async ({ nestId, dateBirth }) => {
+export const eggToBird = async ({ id }) => {
+  console.log({ id })
   const { egg } = await request(
     GRAPHQL_URL,
     gql`
-      mutation addNewEgg($nestId: ID!, $dateBirth: Date) {
-        createEgg(
-          input: { data: { birds_nest: $nestId, dateBirth: $dateBirth } }
-        ) {
+      mutation updateEgg($egg: ID!) {
+        updateEgg(input: { where: { id: $egg }, data: { birdCreated: true } }) {
           egg {
             id
             dateBirth
+            dateHash
           }
         }
       }
     `,
-    { nestId, dateBirth: moment().format('YYYY-MM-DD') }
+    { egg: id }
   )
+  console.log({ egg })
   return egg
 }
 
-export const useCreateNewEgg = (nestId) => {
+export const useEggToBird = (nestId) => {
+  console.log({ nestIdfromHook: nestId })
   const queryClient = useQueryClient()
-  return useMutation(async (data) => await createNewEgg(data), {
+  return useMutation(async (data) => await eggToBird(data), {
     onSuccess: () => {
       queryClient.invalidateQueries(['graphql_nest', nestId])
     }

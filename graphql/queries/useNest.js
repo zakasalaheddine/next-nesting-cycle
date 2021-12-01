@@ -24,7 +24,7 @@ export const queryNest = async (nestId) => {
               type
             }
           }
-          eggs {
+          eggs(where: { birdCreated: false }) {
             id
             dateBirth
             dateHash

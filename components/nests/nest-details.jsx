@@ -1,16 +1,22 @@
 import { Button, IconButton } from '@chakra-ui/button'
+import { useDisclosure } from '@chakra-ui/hooks'
 import { Box, Text } from '@chakra-ui/layout'
 import styled from '@emotion/styled'
+import AddEditBirdModal from 'components/birds/add-edit-bird-modal'
 import { useCreateNewEgg } from 'graphql/mutations/createEgg'
 import { useHashEgg } from 'graphql/mutations/hashEgg'
+import { useState } from 'react'
 import { BirdIcon } from 'utils/icons/bird-icon'
 import { CrackedEgg } from 'utils/icons/cracked-icon'
 
-export default function NestDetails({ nest }) {
+export default function NestDetails({ nest, types }) {
   const { male, female, eggs, id } = nest
+  const [selectedEgg, setSelectedEgg] = useState(null)
   const { mutate, isLoading } = useCreateNewEgg(id)
   const { mutate: hashEggMutation, isLoading: isEggHashLoading } =
     useHashEgg(id)
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const addNewEgg = () => {
     mutate({ nestId: id })
@@ -20,44 +26,62 @@ export default function NestDetails({ nest }) {
     hashEggMutation({ id: eggId })
   }
 
-  return (
-    <DetailsContainer>
-      <ParentsContainer>
-        <Box>Male {`${male.bird_type.type} ${male.ringNumber}`}</Box>
-        <Box>Female {`${female.bird_type.type} ${female.ringNumber}`}</Box>
-      </ParentsContainer>
-      <EggsContainer>
-        {eggs.map((egg, idx) => (
-          <Box key={egg.id}>
-            <Text>
-              Egg {idx + 1} | {egg.dateBirth}
-            </Text>
-            <IconButton
-              aria-label="Cracked Egg"
-              icon={
-                egg.dateHash ? (
-                  <BirdIcon fill="none" />
-                ) : (
-                  <CrackedEgg fill="none" />
-                )
-              }
-              onClick={() => hashEgg(egg.id)}
-              isLoading={isEggHashLoading}
-            />
-          </Box>
-        ))}
-      </EggsContainer>
+  const openCreateNewBird = (eggId) => {
+    setSelectedEgg(eggId)
+    onOpen()
+  }
 
-      <Button
-        colorScheme="teal"
-        mt="10"
-        w="full"
-        onClick={addNewEgg}
-        isLoading={isLoading}
-      >
-        Add New Egg
-      </Button>
-    </DetailsContainer>
+  return (
+    <>
+      <AddEditBirdModal
+        isOpen={isOpen}
+        onClose={onClose}
+        types={types}
+        selectedEgg={selectedEgg}
+        nestId={id}
+      />
+      <DetailsContainer>
+        <ParentsContainer>
+          <Box>Male {`${male.bird_type.type} ${male.ringNumber}`}</Box>
+          <Box>Female {`${female.bird_type.type} ${female.ringNumber}`}</Box>
+        </ParentsContainer>
+        <EggsContainer>
+          {eggs.map((egg, idx) => (
+            <Box key={egg.id}>
+              <Text>
+                Egg {idx + 1} | {egg.dateBirth}
+              </Text>
+              <IconButton
+                aria-label="Cracked Egg"
+                icon={
+                  egg.dateHash ? (
+                    <BirdIcon fill="none" />
+                  ) : (
+                    <CrackedEgg fill="none" />
+                  )
+                }
+                onClick={
+                  egg.dateHash
+                    ? () => openCreateNewBird(egg.id)
+                    : () => hashEgg(egg.id)
+                }
+                isLoading={isEggHashLoading}
+              />
+            </Box>
+          ))}
+        </EggsContainer>
+
+        <Button
+          colorScheme="teal"
+          mt="10"
+          w="full"
+          onClick={addNewEgg}
+          isLoading={isLoading}
+        >
+          Add New Egg
+        </Button>
+      </DetailsContainer>
+    </>
   )
 }
 

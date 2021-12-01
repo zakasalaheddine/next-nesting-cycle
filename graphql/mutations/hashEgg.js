@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import { GRAPHQL_URL } from 'utils/constants'
 
 export const hashEgg = async ({ id }) => {
-  const { bird } = await request(
+  const { egg } = await request(
     GRAPHQL_URL,
     gql`
       mutation updateEgg($egg: ID!, $dateHash: Date) {
@@ -21,7 +21,7 @@ export const hashEgg = async ({ id }) => {
     `,
     { egg: id, dateHash: moment().format('YYYY-MM-DD') }
   )
-  return bird
+  return egg
 }
 
 export const useHashEgg = (nestId) => {

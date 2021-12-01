@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/modal'
 import { Select } from '@chakra-ui/select'
 import { useCreateNewBird } from 'graphql/mutations/createBird'
+import { useEggToBird } from 'graphql/mutations/eggToBird'
 import { useUpdateBird } from 'graphql/mutations/updateBird'
 import { useEffect, useState } from 'react'
 
@@ -19,12 +20,17 @@ export default function AddEditBirdModal({
   isOpen,
   onClose,
   types,
-  birdToEdit
+  birdToEdit,
+  selectedEgg,
+  nestId
 }) {
   const { mutate: createMutation, isLoading: isCreateLoading } =
     useCreateNewBird()
   const { mutate: updateBirdMutation, isLoading: isUpdateLoading } =
     useUpdateBird()
+
+  const { mutate: eggToBirdMutation, isLoading: isEggToBirdLoading } =
+    useEggToBird(nestId)
 
   const [bird, setBird] = useState({
     ringNumber: '',
@@ -40,12 +46,16 @@ export default function AddEditBirdModal({
         sexe: bird.sexe,
         type: bird.type
       })
+
     } else {
       createMutation({
         ringNumber: bird.ringNumber,
         sexe: bird.sexe,
         type: bird.type
       })
+      if (selectedEgg) {
+        eggToBirdMutation({ id: selectedEgg })
+      }
     }
 
     setBird({
@@ -113,7 +123,7 @@ export default function AddEditBirdModal({
             colorScheme="blue"
             mr={3}
             onClick={handleAddNestSubmit}
-            isLoading={isCreateLoading || isUpdateLoading}
+            isLoading={isCreateLoading || isUpdateLoading || isEggToBirdLoading}
           >
             Save
           </Button>
