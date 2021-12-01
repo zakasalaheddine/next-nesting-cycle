@@ -16,7 +16,7 @@ export default function BirdsList({ birdsTypes, birds }) {
         birdToEdit={birdToEdit}
       />
       <Table variant="simple" size="sm">
-        <TableCaption placement="bottom">
+        <TableCaption placement="top">
           <div>Manage My Birds</div>
           <Button
             colorScheme="orange"

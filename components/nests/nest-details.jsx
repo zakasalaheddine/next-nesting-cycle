@@ -3,6 +3,7 @@ import { useDisclosure } from '@chakra-ui/hooks'
 import { Box, Text } from '@chakra-ui/layout'
 import styled from '@emotion/styled'
 import AddEditBirdModal from 'components/birds/add-edit-bird-modal'
+import Layout from 'components/layout'
 import { useCreateNewEgg } from 'graphql/mutations/createEgg'
 import { useHashEgg } from 'graphql/mutations/hashEgg'
 import { useState } from 'react'
@@ -32,7 +33,7 @@ export default function NestDetails({ nest, types }) {
   }
 
   return (
-    <>
+    <Layout>
       <AddEditBirdModal
         isOpen={isOpen}
         onClose={onClose}
@@ -81,7 +82,7 @@ export default function NestDetails({ nest, types }) {
           Add New Egg
         </Button>
       </DetailsContainer>
-    </>
+    </Layout>
   )
 }
 
