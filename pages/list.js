@@ -6,8 +6,9 @@ import { getAllBirds } from 'utils/requests/birds'
 import { Skeleton } from '@chakra-ui/react'
 import { queryBirdTypes } from 'graphql/queries/useBirdTypes'
 import { useBirds } from 'graphql/queries/useBirds'
+import { queryFamilies } from 'graphql/queries/useFamilies'
 
-export default function ListsOfBirds({ types }) {
+export default function ListsOfBirds({ types, families }) {
   const { isLoading, data } = useBirds()
   return (
     <Layout>
@@ -19,7 +20,7 @@ export default function ListsOfBirds({ types }) {
             <Skeleton height="20px" />
           </Stack>
         ) : (
-          <BirdsList birdsTypes={types} birds={data} />
+          <BirdsList birdsTypes={types} birds={data} families={families} />
         )}
       </Box>
     </Layout>
@@ -28,5 +29,6 @@ export default function ListsOfBirds({ types }) {
 
 export const getStaticProps = async (_) => {
   const birdsTypes = await queryBirdTypes()
-  return { props: { types: birdsTypes } }
+  const families = await queryFamilies()
+  return { props: { types: birdsTypes, families } }
 }

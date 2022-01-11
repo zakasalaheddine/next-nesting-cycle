@@ -16,6 +16,11 @@ export const queryBirds = async () => {
             type
           }
           sexe
+          families: sibling_detail {
+            family: sibling {
+              id
+            }
+          }
         }
       }
     `

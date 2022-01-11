@@ -2,8 +2,10 @@ import { gql, request } from 'graphql-request'
 import { useMutation, useQueryClient } from 'react-query'
 import { GRAPHQL_URL } from 'utils/constants'
 
-export const updateBird = async ({ id, ringNumber, sexe, type }) => {
-  const { bird } = await request(
+export const updateBird = async ({ id, ringNumber, sexe, type, family }) => {
+  const {
+    updateBird: { bird }
+  } = await request(
     GRAPHQL_URL,
     gql`
       mutation updateBird(

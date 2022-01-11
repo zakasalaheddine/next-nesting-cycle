@@ -3,10 +3,14 @@ import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table'
 import AddEditBirdModal from './add-edit-bird-modal'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { useState } from 'react'
+import { useFamilies } from 'graphql/queries/useFamilies'
 
-export default function BirdsList({ birdsTypes, birds }) {
+export default function BirdsList({ birdsTypes, birds, families }) {
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [birdToEdit, setBirdToEdit] = useState()
+  const { data: graphQlFamiles } = useFamilies(families)
+  
   return (
     <>
       <AddEditBirdModal
@@ -14,6 +18,7 @@ export default function BirdsList({ birdsTypes, birds }) {
         onClose={onClose}
         types={birdsTypes}
         birdToEdit={birdToEdit}
+        families={graphQlFamiles}
       />
       <Table variant="simple" size="sm">
         <TableCaption placement="top">

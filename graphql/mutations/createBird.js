@@ -1,9 +1,12 @@
 import { gql, request } from 'graphql-request'
 import { useMutation, useQueryClient } from 'react-query'
 import { GRAPHQL_URL } from 'utils/constants'
+import { connectFamily } from './addFamily'
 
-export const createNewBird = async ({ ringNumber, sexe, type }) => {
-  const { nest } = await request(
+export const createNewBird = async ({ ringNumber, sexe, type, family }) => {
+  const {
+    createBird: { bird }
+  } = await request(
     GRAPHQL_URL,
     gql`
       mutation createNewbird(
@@ -29,7 +32,8 @@ export const createNewBird = async ({ ringNumber, sexe, type }) => {
     `,
     { ringNumber, sexe, type }
   )
-  return nest
+  await connectFamily({ siblingsId: family, newBirdId: bird.id })
+  return bird
 }
 
 export const useCreateNewBird = () => {

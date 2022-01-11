@@ -22,7 +22,8 @@ export default function AddEditBirdModal({
   types,
   birdToEdit,
   selectedEgg,
-  nestId
+  nestId,
+  families
 }) {
   const { mutate: createMutation, isLoading: isCreateLoading } =
     useCreateNewBird()
@@ -35,7 +36,8 @@ export default function AddEditBirdModal({
   const [bird, setBird] = useState({
     ringNumber: '',
     type: types[0] ? types[0].id : '',
-    sexe: 'female'
+    sexe: 'female',
+    family: families[0] ? families[0].id : ''
   })
 
   const handleAddNestSubmit = async () => {
@@ -44,14 +46,15 @@ export default function AddEditBirdModal({
         id: bird.id,
         ringNumber: bird.ringNumber,
         sexe: bird.sexe,
-        type: bird.type
+        type: bird.type,
+        family: bird.family
       })
-
     } else {
       createMutation({
         ringNumber: bird.ringNumber,
         sexe: bird.sexe,
-        type: bird.type
+        type: bird.type,
+        family: bird.family
       })
       if (selectedEgg) {
         eggToBirdMutation({ id: selectedEgg })
@@ -61,7 +64,8 @@ export default function AddEditBirdModal({
     setBird({
       ringNumber: '',
       type: types[0] ? types[0].id : '',
-      sexe: 'female'
+      sexe: 'female',
+      family: families[0] ? families[0].id : ''
     })
     onClose()
   }
@@ -75,7 +79,8 @@ export default function AddEditBirdModal({
       setBird({
         ringNumber: '',
         type: types[0] ? types[0].id : '',
-        sexe: 'female'
+        sexe: 'female',
+        family: families[0] ? families[0].id : ''
       })
   }, [birdToEdit])
   return (
@@ -114,6 +119,19 @@ export default function AddEditBirdModal({
             >
               <option value="male">Male</option>
               <option value="female">Female</option>
+            </Select>
+          </FormControl>
+          <FormControl>
+            <FormLabel>Families</FormLabel>
+            <Select
+              value={bird.family}
+              onChange={(e) => handleChange('family', e.target.value)}
+            >
+              {families.map(({ id }) => (
+                <option value={id} key={id}>
+                  Family {id}
+                </option>
+              ))}
             </Select>
           </FormControl>
         </ModalBody>
