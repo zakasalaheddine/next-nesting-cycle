@@ -37,7 +37,7 @@ const getSiblingByBirdId = async (birdId) => {
   return false
 }
 
-const createSibling = async (nestId) => {
+const createFamily = async (nestId) => {
   const { createSibling } = await request(
     GRAPHQL_URL,
     gql`
@@ -49,7 +49,7 @@ const createSibling = async (nestId) => {
         }
       }
     `,
-    { birdId }
+    { nestId }
   )
   const { sibling } = createSibling
   return sibling.id
@@ -63,7 +63,7 @@ const checkSibling = async ({ nestId, birdId, siblingsId }) => {
   if (birdId) {
     return await getSiblingByBirdId(birdId)
   }
-  return await createSibling(nestId)
+  return await createFamily(nestId)
 }
 
 export const connectFamily = async ({

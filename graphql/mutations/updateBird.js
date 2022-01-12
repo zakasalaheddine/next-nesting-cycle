@@ -1,6 +1,7 @@
 import { gql, request } from 'graphql-request'
 import { useMutation, useQueryClient } from 'react-query'
 import { GRAPHQL_URL } from 'utils/constants'
+import { moveBirdToNewFamily } from './editBirdFamily'
 
 export const updateBird = async ({ id, ringNumber, sexe, type, family }) => {
   const {
@@ -33,6 +34,7 @@ export const updateBird = async ({ id, ringNumber, sexe, type, family }) => {
     `,
     { ringNumber, sexe, type, bird: id }
   )
+  await moveBirdToNewFamily(family, id)
   return bird
 }
 

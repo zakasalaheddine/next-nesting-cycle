@@ -10,8 +10,11 @@ import {
   ModalHeader,
   ModalOverlay
 } from '@chakra-ui/modal'
+import { Box } from '@chakra-ui/react'
 import { Select } from '@chakra-ui/select'
+import { useConnectFamily } from 'graphql/mutations/addFamily'
 import { useCreateNewBird } from 'graphql/mutations/createBird'
+import { useCreateFamilyFromBird } from 'graphql/mutations/createFamilyFromBird'
 import { useEggToBird } from 'graphql/mutations/eggToBird'
 import { useUpdateBird } from 'graphql/mutations/updateBird'
 import { useEffect, useState } from 'react'
@@ -25,13 +28,18 @@ export default function AddEditBirdModal({
   nestId,
   families
 }) {
-  const { mutate: createMutation, isLoading: isCreateLoading } =
+  const { mutateAsync: createMutation, isLoading: isCreateLoading } =
     useCreateNewBird()
-  const { mutate: updateBirdMutation, isLoading: isUpdateLoading } =
+  const { mutateAsync: updateBirdMutation, isLoading: isUpdateLoading } =
     useUpdateBird()
 
-  const { mutate: eggToBirdMutation, isLoading: isEggToBirdLoading } =
+  const { mutateAsync: eggToBirdMutation, isLoading: isEggToBirdLoading } =
     useEggToBird(nestId)
+
+  const {
+    mutateAsync: createFamilyFromBird,
+    isLoading: isCreateFamilyFromBird
+  } = useCreateFamilyFromBird()
 
   const [bird, setBird] = useState({
     ringNumber: '',
@@ -73,8 +81,18 @@ export default function AddEditBirdModal({
     setBird({ ...bird, [key]: value })
   }
 
+  const handleCreateNewFamily = async () => {
+    const familyId = await createFamilyFromBird()
+    setBird({ ...bird, family: familyId })
+  }
+
   useEffect(() => {
-    if (birdToEdit) setBird({ ...birdToEdit, type: birdToEdit.birdsTypeId })
+    if (birdToEdit)
+      setBird({
+        ...birdToEdit,
+        type: birdToEdit.birdsTypeId,
+        family: birdToEdit.families?.family?.id || ''
+      })
     else
       setBird({
         ringNumber: '',
@@ -121,18 +139,33 @@ export default function AddEditBirdModal({
               <option value="female">Female</option>
             </Select>
           </FormControl>
-          <FormControl>
-            <FormLabel>Families</FormLabel>
-            <Select
-              value={bird.family}
-              onChange={(e) => handleChange('family', e.target.value)}
+          <FormControl
+            display="flex"
+            alignItems="end"
+            justifyContent="space-between"
+          >
+            <Box flex="1" mr="2">
+              <FormLabel>Families</FormLabel>
+              <Select
+                value={bird.family}
+                onChange={(e) => handleChange('family', e.target.value)}
+              >
+                <option value="">Select Family</option>
+                {families.map(({ id }) => (
+                  <option value={id} key={id}>
+                    Family {id}
+                  </option>
+                ))}
+              </Select>
+            </Box>
+            <Button
+              colorScheme="teal"
+              disabled={!birdToEdit}
+              isLoading={isCreateFamilyFromBird}
+              onClick={handleCreateNewFamily}
             >
-              {families.map(({ id }) => (
-                <option value={id} key={id}>
-                  Family {id}
-                </option>
-              ))}
-            </Select>
+              Create New Family
+            </Button>
           </FormControl>
         </ModalBody>
 
@@ -141,7 +174,12 @@ export default function AddEditBirdModal({
             colorScheme="blue"
             mr={3}
             onClick={handleAddNestSubmit}
-            isLoading={isCreateLoading || isUpdateLoading || isEggToBirdLoading}
+            isLoading={
+              isCreateLoading ||
+              isUpdateLoading ||
+              isEggToBirdLoading ||
+              isCreateFamilyFromBird
+            }
           >
             Save
           </Button>
