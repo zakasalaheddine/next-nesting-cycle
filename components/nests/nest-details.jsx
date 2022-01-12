@@ -10,7 +10,7 @@ import { useState } from 'react'
 import { BirdIcon } from 'utils/icons/bird-icon'
 import { CrackedEgg } from 'utils/icons/cracked-icon'
 
-export default function NestDetails({ nest, types }) {
+export default function NestDetails({ nest, types, families }) {
   const { male, female, eggs, id } = nest
   const [selectedEgg, setSelectedEgg] = useState(null)
   const { mutate, isLoading } = useCreateNewEgg(id)
@@ -40,6 +40,7 @@ export default function NestDetails({ nest, types }) {
         types={types}
         selectedEgg={selectedEgg}
         nestId={id}
+        families={families}
       />
       <DetailsContainer>
         <ParentsContainer>

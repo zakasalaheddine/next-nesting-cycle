@@ -13,6 +13,8 @@ import {
 import { Box } from '@chakra-ui/react'
 import { Select } from '@chakra-ui/select'
 import { useConnectFamily } from 'graphql/mutations/addFamily'
+import { connectNewBirdToFamily } from 'graphql/mutations/connectBirdToFamily'
+import { firstOrCreateFamilyByNest } from 'graphql/mutations/connectBirdToNestFamily'
 import { useCreateNewBird } from 'graphql/mutations/createBird'
 import { useCreateFamilyFromBird } from 'graphql/mutations/createFamilyFromBird'
 import { useEggToBird } from 'graphql/mutations/eggToBird'
@@ -58,14 +60,15 @@ export default function AddEditBirdModal({
         family: bird.family
       })
     } else {
-      createMutation({
+      const createdBird = await createMutation({
         ringNumber: bird.ringNumber,
         sexe: bird.sexe,
-        type: bird.type,
-        family: bird.family
+        type: bird.type
       })
       if (selectedEgg) {
         eggToBirdMutation({ id: selectedEgg })
+        const familyId = await firstOrCreateFamilyByNest(nestId)
+        await connectNewBirdToFamily(familyId, createdBird.id)
       }
     }
 
@@ -139,34 +142,36 @@ export default function AddEditBirdModal({
               <option value="female">Female</option>
             </Select>
           </FormControl>
-          <FormControl
-            display="flex"
-            alignItems="end"
-            justifyContent="space-between"
-          >
-            <Box flex="1" mr="2">
-              <FormLabel>Families</FormLabel>
-              <Select
-                value={bird.family}
-                onChange={(e) => handleChange('family', e.target.value)}
-              >
-                <option value="">Select Family</option>
-                {families.map(({ id }) => (
-                  <option value={id} key={id}>
-                    Family {id}
-                  </option>
-                ))}
-              </Select>
-            </Box>
-            <Button
-              colorScheme="teal"
-              disabled={!birdToEdit}
-              isLoading={isCreateFamilyFromBird}
-              onClick={handleCreateNewFamily}
+          {!selectedEgg && (
+            <FormControl
+              display="flex"
+              alignItems="end"
+              justifyContent="space-between"
             >
-              Create New Family
-            </Button>
-          </FormControl>
+              <Box flex="1" mr="2">
+                <FormLabel>Families</FormLabel>
+                <Select
+                  value={bird.family}
+                  onChange={(e) => handleChange('family', e.target.value)}
+                >
+                  <option value="">Select Family</option>
+                  {families.map(({ id }) => (
+                    <option value={id} key={id}>
+                      Family {id}
+                    </option>
+                  ))}
+                </Select>
+              </Box>
+              <Button
+                colorScheme="teal"
+                disabled={!birdToEdit}
+                isLoading={isCreateFamilyFromBird}
+                onClick={handleCreateNewFamily}
+              >
+                Create New Family
+              </Button>
+            </FormControl>
+          )}
         </ModalBody>
 
         <ModalFooter>

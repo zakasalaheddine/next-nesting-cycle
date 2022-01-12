@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import { GRAPHQL_URL } from 'utils/constants'
 import { connectFamily } from './addFamily'
 
-export const createNewBird = async ({ ringNumber, sexe, type, family }) => {
+export const createNewBird = async ({ ringNumber, sexe, type }) => {
   const {
     createBird: { bird }
   } = await request(
@@ -32,7 +32,6 @@ export const createNewBird = async ({ ringNumber, sexe, type, family }) => {
     `,
     { ringNumber, sexe, type }
   )
-  await connectFamily({ siblingsId: family, newBirdId: bird.id })
   return bird
 }
 

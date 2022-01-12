@@ -1,5 +1,4 @@
 import { gql, request } from 'graphql-request'
-import { useMutation, useQueryClient } from 'react-query'
 import { GRAPHQL_URL } from 'utils/constants'
 import { connectNewBirdToFamily } from './connectBirdToFamily'
 
