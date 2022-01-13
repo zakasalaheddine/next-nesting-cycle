@@ -47,7 +47,7 @@ export default function AddEditBirdModal({
     ringNumber: '',
     type: types[0] ? types[0].id : '',
     sexe: 'female',
-    family: families[0] ? families[0].id : ''
+    family: ''
   })
 
   const handleAddNestSubmit = async () => {
@@ -76,7 +76,7 @@ export default function AddEditBirdModal({
       ringNumber: '',
       type: types[0] ? types[0].id : '',
       sexe: 'female',
-      family: families[0] ? families[0].id : ''
+      family: ''
     })
     onClose()
   }
@@ -101,7 +101,7 @@ export default function AddEditBirdModal({
         ringNumber: '',
         type: types[0] ? types[0].id : '',
         sexe: 'female',
-        family: families[0] ? families[0].id : ''
+        family: ''
       })
   }, [birdToEdit])
   return (
@@ -147,6 +147,7 @@ export default function AddEditBirdModal({
               display="flex"
               alignItems="end"
               justifyContent="space-between"
+              isDisabled={!birdToEdit}
             >
               <Box flex="1" mr="2">
                 <FormLabel>Families</FormLabel>

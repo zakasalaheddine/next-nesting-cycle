@@ -11,15 +11,39 @@ import {
 } from '@chakra-ui/modal'
 import { Select } from '@chakra-ui/select'
 import { useCreateNewNest } from 'graphql/mutations/createNest'
+import { useEffect } from 'react'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { addNewNest } from 'utils/requests/nests'
 
+const findMaleFamilyWithId = (id, males = []) =>
+  males.find((male) => male.id === id).families
+
 export default function AddNestModal({ isOpen, onClose, males, females }) {
+  console.log({ males, females })
   const [male, setMale] = useState('')
   const [female, setFemale] = useState('')
+  const [allMales, setAllMales] = useState(males)
+  const [allFemales, setAllFemales] = useState(females)
 
-  const { mutate } = useCreateNewNest()
+  const { mutateAsync } = useCreateNewNest()
+
+  useEffect(() => {
+    setAllMales(males)
+    setAllFemales(females)
+  }, [males, females])
+
+  const handleChangeMaleSelect = (e) => {
+    setMale(e.target.value)
+    if (e.target.value === '') return setAllFemales(females)
+    const selectedFamily = findMaleFamilyWithId(e.target.value, males)
+    if (!selectedFamily) return setAllFemales(females)
+
+    const notSiblingsFemales = females.filter(
+      (element) => element.families?.family?.id !== selectedFamily.family.id
+    )
+    setAllFemales(notSiblingsFemales)
+  }
 
   const handleAddNestSubmit = async () => {
     await mutate({ male, female })
@@ -34,14 +58,9 @@ export default function AddNestModal({ isOpen, onClose, males, females }) {
         <ModalBody>
           <FormControl>
             <FormLabel>Male</FormLabel>
-            <Select
-              value={male}
-              onChange={(e) => {
-                setMale(e.target.value)
-              }}
-            >
+            <Select value={male} onChange={handleChangeMaleSelect}>
               <option value="">Select a male</option>
-              {males.map((male) => (
+              {allMales.map((male) => (
                 <option key={male.id} value={male.id}>
                   {male.ringNumber}
                 </option>
@@ -57,7 +76,7 @@ export default function AddNestModal({ isOpen, onClose, males, females }) {
               }}
             >
               <option value="">Select a female</option>
-              {females.map((female) => (
+              {allFemales.map((female) => (
                 <option key={female.id} value={female.id}>
                   {female.ringNumber}
                 </option>
