@@ -19,6 +19,7 @@ import { useCreateNewBird } from 'graphql/mutations/createBird'
 import { useCreateFamilyFromBird } from 'graphql/mutations/createFamilyFromBird'
 import { useEggToBird } from 'graphql/mutations/eggToBird'
 import { useUpdateBird } from 'graphql/mutations/updateBird'
+import { arLang } from 'lang/ar'
 import { useEffect, useState } from 'react'
 
 export default function AddEditBirdModal({
@@ -108,11 +109,11 @@ export default function AddEditBirdModal({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add New Nest</ModalHeader>
+        <ModalHeader>{arLang['Add New Nest']}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <FormControl>
-            <FormLabel>Ring Number</FormLabel>
+            <FormLabel>{arLang['Ring Number']}</FormLabel>
             <Input
               type="text"
               value={bird.ringNumber}
@@ -120,7 +121,7 @@ export default function AddEditBirdModal({
             />
           </FormControl>
           <FormControl>
-            <FormLabel>Type</FormLabel>
+            <FormLabel>{arLang['Bird Type']}</FormLabel>
             <Select
               value={bird.type}
               onChange={(e) => handleChange('type', e.target.value)}
@@ -133,13 +134,13 @@ export default function AddEditBirdModal({
             </Select>
           </FormControl>
           <FormControl>
-            <FormLabel>Sexe</FormLabel>
+            <FormLabel>{arLang['Bird Sexe']}</FormLabel>
             <Select
               value={bird.sexe}
               onChange={(e) => handleChange('sexe', e.target.value)}
             >
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+              <option value="male">{arLang['Male']}</option>
+              <option value="female">{arLang['Female']}</option>
             </Select>
           </FormControl>
           {!selectedEgg && (
@@ -150,12 +151,12 @@ export default function AddEditBirdModal({
               isDisabled={!birdToEdit}
             >
               <Box flex="1" mr="2">
-                <FormLabel>Families</FormLabel>
+                <FormLabel>{arLang['Families']}</FormLabel>
                 <Select
                   value={bird.family}
                   onChange={(e) => handleChange('family', e.target.value)}
                 >
-                  <option value="">Select Family</option>
+                  <option value="">{arLang['Select Family']}</option>
                   {families.map(({ id }) => (
                     <option value={id} key={id}>
                       Family {id}
@@ -169,7 +170,7 @@ export default function AddEditBirdModal({
                 isLoading={isCreateFamilyFromBird}
                 onClick={handleCreateNewFamily}
               >
-                Create New Family
+                {arLang['Create New Family']}
               </Button>
             </FormControl>
           )}
@@ -187,7 +188,7 @@ export default function AddEditBirdModal({
               isCreateFamilyFromBird
             }
           >
-            Save
+            {arLang['Save']}
           </Button>
         </ModalFooter>
       </ModalContent>

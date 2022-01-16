@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/modal'
 import { Select } from '@chakra-ui/select'
 import { useCreateNewNest } from 'graphql/mutations/createNest'
+import { arLang } from 'lang/ar'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
@@ -53,13 +54,13 @@ export default function AddNestModal({ isOpen, onClose, males, females }) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add New Nest</ModalHeader>
+        <ModalHeader>{arLang['Add New Nest']}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <FormControl>
-            <FormLabel>Male</FormLabel>
+            <FormLabel>{arLang['Male']}</FormLabel>
             <Select value={male} onChange={handleChangeMaleSelect}>
-              <option value="">Select a male</option>
+              <option value="">{arLang['Select a male']}</option>
               {allMales.map((male) => (
                 <option key={male.id} value={male.id}>
                   {male.ringNumber}
@@ -68,14 +69,14 @@ export default function AddNestModal({ isOpen, onClose, males, females }) {
             </Select>
           </FormControl>
           <FormControl>
-            <FormLabel>Female</FormLabel>
+            <FormLabel>{arLang['Female']}</FormLabel>
             <Select
               value={female}
               onChange={(e) => {
                 setFemale(e.target.value)
               }}
             >
-              <option value="">Select a female</option>
+              <option value="">{arLang['Select a female']}</option>
               {allFemales.map((female) => (
                 <option key={female.id} value={female.id}>
                   {female.ringNumber}
@@ -87,7 +88,7 @@ export default function AddNestModal({ isOpen, onClose, males, females }) {
 
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={handleAddNestSubmit}>
-            Save
+            {arLang['Save']}
           </Button>
         </ModalFooter>
       </ModalContent>

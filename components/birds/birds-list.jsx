@@ -4,13 +4,13 @@ import AddEditBirdModal from './add-edit-bird-modal'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { useState } from 'react'
 import { useFamilies } from 'graphql/queries/useFamilies'
+import { arLang } from 'lang/ar'
 
 export default function BirdsList({ birdsTypes, birds, families }) {
-
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [birdToEdit, setBirdToEdit] = useState()
   const { data: graphQlFamiles } = useFamilies(families)
-  
+
   return (
     <>
       <AddEditBirdModal
@@ -22,7 +22,7 @@ export default function BirdsList({ birdsTypes, birds, families }) {
       />
       <Table variant="simple" size="sm">
         <TableCaption placement="top">
-          <div>Manage My Birds</div>
+          <div>{arLang['Manage My Birds']}</div>
           <Button
             colorScheme="orange"
             onClick={() => {
@@ -30,15 +30,15 @@ export default function BirdsList({ birdsTypes, birds, families }) {
               onOpen()
             }}
           >
-            Add New Bird
+            {arLang['Add New Bird']}
           </Button>
         </TableCaption>
         <Thead>
           <Tr>
-            <Th>Ring Number</Th>
-            <Th>Bird Type</Th>
-            <Th>Bird Sexe</Th>
-            <Th>Actions</Th>
+            <Th>{arLang['Ring Number']}</Th>
+            <Th>{arLang['Bird Type']}</Th>
+            <Th>{arLang['Bird Sexe']}</Th>
+            <Th>{arLang['Actions']}</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -46,7 +46,7 @@ export default function BirdsList({ birdsTypes, birds, families }) {
             <Tr key={bird.id}>
               <Td>{bird.ringNumber}</Td>
               <Td>{bird.bird_type.type}</Td>
-              <Td>{bird.sexe}</Td>
+              <Td>{arLang[bird.sexe]}</Td>
               <Td
                 display="flex"
                 alignItems="center"
@@ -60,10 +60,10 @@ export default function BirdsList({ birdsTypes, birds, families }) {
                     onOpen()
                   }}
                 >
-                  Edit
+                  {arLang['Edit']}
                 </Button>
                 <Button colorScheme="red" size="sm">
-                  Delete
+                  {arLang['Delete']}
                 </Button>
               </Td>
             </Tr>

@@ -1,6 +1,7 @@
 import { Button, ButtonGroup } from '@chakra-ui/button'
 import { Box } from '@chakra-ui/layout'
 import styled from '@emotion/styled'
+import { arLang } from 'lang/ar'
 import Link from 'next/link'
 
 export default function Layout({ children }) {
@@ -9,12 +10,12 @@ export default function Layout({ children }) {
       <ButtonGroup size="lg" isAttached mx="auto" my="5" variant="outline">
         <Link href="/">
           <Button mr="-px" colorScheme="red" as="a" cursor="pointer">
-            Nests
+            {arLang['Nests']}
           </Button>
         </Link>
         <Link href="/list">
           <Button mr="-px" colorScheme="teal" as="a" cursor="pointer">
-            Birds
+            {arLang['Birds']}
           </Button>
         </Link>
       </ButtonGroup>

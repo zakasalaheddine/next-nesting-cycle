@@ -1,4 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react'
+import { RtlProvider } from 'components/rtl-provider'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 function MyApp({ Component, pageProps }) {
@@ -6,7 +7,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
-        <Component {...pageProps} />
+        <RtlProvider>
+          <Component {...pageProps} />
+        </RtlProvider>
       </ChakraProvider>
     </QueryClientProvider>
   )

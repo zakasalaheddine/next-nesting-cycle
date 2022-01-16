@@ -1,13 +1,14 @@
 import { IconButton } from '@chakra-ui/button'
 import Icon from '@chakra-ui/icon'
 import styled from '@emotion/styled'
+import { arLang } from 'lang/ar'
 import { IoIosAdd } from 'react-icons/io'
 
 export default function AddNestFloatingButton({ onClick }) {
   return (
     <AddNestButton
       onClick={onClick}
-      aria-label="Add New Nest"
+      aria-label={arLang['Add New Nest']}
       colorScheme="teal"
       icon={<Icon as={IoIosAdd} h={50} w={50} />}
     />

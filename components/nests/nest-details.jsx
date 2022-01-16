@@ -6,9 +6,14 @@ import AddEditBirdModal from 'components/birds/add-edit-bird-modal'
 import Layout from 'components/layout'
 import { useCreateNewEgg } from 'graphql/mutations/createEgg'
 import { useHashEgg } from 'graphql/mutations/hashEgg'
+import { arLang } from 'lang/ar'
+import moment from 'moment'
+import 'moment/locale/ar-ma'
 import { useState } from 'react'
 import { BirdIcon } from 'utils/icons/bird-icon'
 import { CrackedEgg } from 'utils/icons/cracked-icon'
+
+moment.locale('ar-ma');
 
 export default function NestDetails({ nest, types, families }) {
   const { male, female, eggs, id } = nest
@@ -44,14 +49,18 @@ export default function NestDetails({ nest, types, families }) {
       />
       <DetailsContainer>
         <ParentsContainer>
-          <Box>Male {`${male.bird_type.type} ${male.ringNumber}`}</Box>
-          <Box>Female {`${female.bird_type.type} ${female.ringNumber}`}</Box>
+          <Box>
+            {arLang['Male']} {`${male.bird_type.type} ${male.ringNumber}`}
+          </Box>
+          <Box>
+            {arLang['Female']} {`${female.bird_type.type} ${female.ringNumber}`}
+          </Box>
         </ParentsContainer>
         <EggsContainer>
           {eggs.map((egg, idx) => (
             <Box key={egg.id}>
               <Text>
-                Egg {idx + 1} | {egg.dateBirth}
+                {arLang['Egg']} {idx + 1} | {moment(egg.dateBirth).format('LL') }
               </Text>
               <IconButton
                 aria-label="Cracked Egg"
@@ -80,7 +89,7 @@ export default function NestDetails({ nest, types, families }) {
           onClick={addNewEgg}
           isLoading={isLoading}
         >
-          Add New Egg
+          {arLang['Add New Egge']}
         </Button>
       </DetailsContainer>
     </Layout>

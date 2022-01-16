@@ -1,13 +1,16 @@
 import { Button } from '@chakra-ui/button'
 import { Box, Text } from '@chakra-ui/layout'
 import styled from '@emotion/styled'
+import { arLang } from 'lang/ar'
 import Link from 'next/link'
 
-export default function Nest({ id, name, male, female }) {
+export default function Nest({ id, male, female }) {
   return (
     <Link href={`/${id}`}>
       <NestButton as="a" cursor="pointer">
-        <NestName fontSize="3xl">{name}</NestName>
+        <NestName fontSize="3xl">
+          {arLang['Nest']} {id}
+        </NestName>
         <Box fontSize="sm">
           <BirdName>{male?.ringNumber}</BirdName>
           <BirdName>{female?.ringNumber}</BirdName>
