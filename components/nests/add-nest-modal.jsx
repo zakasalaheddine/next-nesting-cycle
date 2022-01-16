@@ -46,7 +46,7 @@ export default function AddNestModal({ isOpen, onClose, males, females }) {
   }
 
   const handleAddNestSubmit = async () => {
-    await mutate({ male, female })
+    await mutateAsync({ male, female })
     onClose()
   }
   return (
