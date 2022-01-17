@@ -1,9 +1,8 @@
 import Head from 'next/head'
 import Layout from '../components/layout'
 import Nests from '../components/nests'
-import { prisma } from 'utils/db/prisma'
-import { useNests } from 'graphql/queries/useNests'
-import { useBirds } from 'graphql/queries/useBirds'
+import { queryNests, useNests } from 'graphql/queries/useNests'
+import { queryBirds, useBirds } from 'graphql/queries/useBirds'
 import { queryFamilies, useFamilies } from 'graphql/queries/useFamilies'
 
 export default function Home({ nests, birds, families }) {
@@ -29,8 +28,8 @@ export default function Home({ nests, birds, families }) {
 }
 
 export async function getStaticProps(_) {
-  const nests = await prisma.nest.findMany()
-  const birds = await prisma.bird.findMany()
+  const nests = await queryNests()
+  const birds = await queryBirds()
   const families = await queryFamilies()
   return { props: { nests, birds, families } }
 }
