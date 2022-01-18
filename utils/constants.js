@@ -1,1 +1,1 @@
-export const GRAPHQL_URL = process.env.GRAPHQL_URL || 'http://localhost:1337/graphql'
+export const GRAPHQL_URL = process.env.GRAPHQL_URL || 'https://nest-api.zakadev.com/graphql'
