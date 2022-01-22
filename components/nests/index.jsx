@@ -19,9 +19,10 @@ export default function Nests({ nests, birds }) {
       >
         <AddNestFloatingButton onClick={onOpen} />
         {nests &&
-          nests.map((nest) => (
+          nests.map((nest, idx) => (
             <Nest
               id={nest.id}
+              number={idx}
               name={nest.name}
               male={nest.male}
               female={nest.female}

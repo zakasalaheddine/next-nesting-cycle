@@ -4,12 +4,12 @@ import styled from '@emotion/styled'
 import { arLang } from 'lang/ar'
 import Link from 'next/link'
 
-export default function Nest({ id, male, female }) {
+export default function Nest({ id, number, male, female }) {
   return (
     <Link href={`/${id}`}>
       <NestButton as="a" cursor="pointer">
         <NestName fontSize="3xl">
-          {arLang['Nest']} {id}
+          {arLang['Nest']} {number + 1}
         </NestName>
         <Box fontSize="sm">
           <BirdName>{male?.ringNumber}</BirdName>
